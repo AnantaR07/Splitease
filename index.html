@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SplitEase – Kalkulator Patungan Otomatis</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* ================================
+         🌿 STYLE DASAR HALAMAN
+         ================================ */
+      body {
+        background: linear-gradient(-45deg, #bbf7d0, #86efac, #4ade80, #22c55e);
+        background-size: 400% 400%;
+        animation: gradientMove 12s ease infinite;
+        min-height: 100vh;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* 💡 =========================================================
+   ANIMASI GLOW — dipakai di logo utama (class="animate-glow")
+   Efek: logo bercahaya berdenyut hijau
+   ========================================================= */
+      @keyframes glow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 8px #4ade80);
+        }
+        50% {
+          filter: drop-shadow(0 0 18px #22c55e);
+        }
+      }
+
+      .animate-glow {
+        animation: glow 2.5s ease-in-out infinite;
+      }
+
+      /* 💫 =========================================================
+   ANIMASI PULSE SLOW — dipakai di lingkaran blur hijau
+   di belakang logo (class="animate-pulse-slow")
+   ========================================================= */
+      @keyframes pulse-slow {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.2);
+        }
+      }
+
+      .animate-pulse-slow {
+        animation: pulse-slow 4s ease-in-out infinite;
+      }
+
+      /* ⚙️ =========================================================
+   ANIMASI FADE-IN / FADE-OUT / SCALE / SLIDE
+   Dipakai di toast, menu, hasil, dan dialog konfirmasi
+   ========================================================= */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Class animasi universal */
+      .animate-fade-in {
+        animation: fadeIn 0.4s ease forwards;
+      }
+      .animate-fade-out {
+        animation: fadeOut 0.4s ease forwards;
+      }
+      .animate-scale-in {
+        animation: scaleIn 0.3s ease forwards;
+      }
+      .animate-slide-in {
+        animation: slideIn 0.4s ease forwards;
+      }
+
+      /* ⚡ =========================================================
+   PULSE GLOW — dipakai di tombol "Hitung" (#calculate)
+   Efek: tombol bercahaya berdenyut
+   ========================================================= */
+      @keyframes pulseGlow {
+        0% {
+          box-shadow: 0 0 10px rgba(34, 197, 94, 0.3),
+            0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 25px rgba(34, 197, 94, 0.6),
+            0 0 50px rgba(16, 185, 129, 0.4);
+        }
+        100% {
+          box-shadow: 0 0 10px rgba(34, 197, 94, 0.3),
+            0 0 20px rgba(16, 185, 129, 0.2);
+        }
+      }
+
+      #calculate {
+        animation: pulseGlow 2.5s infinite ease-in-out;
+      }
+
+      /* 🪶 =========================================================
+   FADE-UP — dipakai di kontainer input, daftar, hasil
+   Efek: elemen muncul dari bawah dengan lembut
+   ========================================================= */
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 0.8s forwards;
+      }
+
+      /* 💎 =========================================================
+   GLOW HOVER — dipakai di container utama (class="glow")
+   Efek: bercahaya biru lembut saat dihover
+   ========================================================= */
+      .glow:hover {
+        box-shadow: 0 0 25px rgba(59, 130, 246, 0.3),
+          0 0 50px rgba(147, 197, 253, 0.2);
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <!-- 🌿 NAVBAR -->
+    <nav
+      class="w-full shadow-md py-3 px-4 sm:px-6 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-50"
+    >
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img
+          src="./assests/img/logo-splitease.png"
+          alt="SplitEase Logo"
+          class="w-8 h-8 rounded-md"
+        />
+        <span class="text-green-700 font-semibold text-lg">SplitEase</span>
+      </div>
+
+      <!-- Hamburger button -->
+      <button
+        id="menu-btn"
+        class="md:hidden flex items-center justify-center text-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-lg p-2"
+      >
+        <svg
+          id="icon-open"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+        <svg
+          id="icon-close"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <!-- Menu utama -->
+      <ul
+        id="menu"
+        class="hidden md:flex md:space-x-6 text-green-700 font-medium flex-col md:flex-row absolute md:static top-full right-4 bg-white shadow-lg rounded-xl p-4 space-y-3 md:space-y-0 md:bg-transparent md:shadow-none md:p-0 md:flex-row transition-all duration-300"
+      >
+        <li>
+          <a
+            href="index.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+          >
+            Beranda
+          </a>
+        </li>
+        <li>
+          <a
+            href="kontak.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+          >
+            Kontak
+          </a>
+        </li>
+        <li>
+          <a
+            href="tentangkami.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+          >
+            Tentang Kami
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <main class="flex-1 flex flex-col items-center justify-start mt-10 px-4">
+      <div
+        class="bg-white/90 backdrop-blur-md shadow-xl rounded-2xl w-full max-w-sm sm:max-w-3xl p-4 sm:p-8 border border-white/40 fade-up glow transition mx-auto mt-6"
+      >
+        <div
+          class="relative flex flex-col sm:flex-row items-center sm:items-start justify-start text-left mb-8 space-y-4 sm:space-y-0 sm:space-x-6"
+        >
+          <!-- Efek partikel lembut -->
+          <div
+            class="absolute w-32 h-32 sm:w-40 sm:h-40 bg-green-300/20 rounded-full blur-3xl animate-pulse-slow left-0"
+          ></div>
+
+          <!-- Logo di kiri -->
+          <img
+            src="./assests/img/logo-splitease.png"
+            alt="SplitEase Logo"
+            class="relative w-16 sm:w-28 rounded-xl drop-shadow-[0_0_8px_#22c55e80] animate-bounce-slow animate-glow flex-shrink-0"
+          />
+
+          <!-- Deskripsi di kanan -->
+          <div
+            class="relative text-sm sm:text-base max-w-xs sm:max-w-md leading-relaxed tracking-wide bg-gradient-to-r from-green-500 via-emerald-400 to-lime-400 bg-clip-text text-transparent animate-fade-in space-y-2"
+          >
+            <p>
+              💡
+              <span class="font-semibold text-green-600">Hitung otomatis</span>
+              — tanpa repot!
+            </p>
+            <p>
+              🤝
+              <span class="font-semibold text-emerald-600">Hasil adil</span>
+              untuk semua teman.
+            </p>
+            <p>
+              ⚡
+              <span class="font-semibold text-lime-600">Cepat & praktis</span>
+              dalam hitungan detik.
+            </p>
+          </div>
+        </div>
+
+        <!-- Input form -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-6 fade-up">
+          <input
+            id="name"
+            type="text"
+            placeholder="Nama peserta patungan"
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/70"
+            oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
+          />
+
+          <input
+            id="amount"
+            type="text"
+            inputmode="numeric"
+            placeholder="Jumlah dibayar (Rp)"
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white/70"
+            oninput="formatNumber(this)"
+          />
+          <button
+            id="add"
+            class="bg-emerald-400 hover:bg-emerald-500 active:bg-emerald-600 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-emerald-300 focus:outline-none"
+          >
+            Tambah
+          </button>
+        </div>
+
+        <!-- Daftar peserta -->
+        <div
+          id="peopleWrap"
+          class="bg-white/60 border border-gray-200 rounded-xl p-4 mb-6 backdrop-blur-sm fade-up"
+        >
+          <ul id="peopleList" class="divide-y divide-gray-200"></ul>
+          <p class="text-gray-400 text-sm mt-2 text-center">
+            Belum ada peserta ditambahkan.
+          </p>
+        </div>
+
+        <!-- Tombol aksi -->
+        <div class="flex flex-wrap gap-3 mb-6 justify-center fade-up">
+          <button
+            id="calculate"
+            class="relative overflow-hidden px-8 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-110 focus:outline-none group"
+          >
+            <span class="relative z-10">Hitung</span>
+            <span
+              class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            ></span>
+            <span
+              class="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-white/30 blur-md transition-transform duration-700"
+            ></span>
+          </button>
+
+          <button
+            id="clear"
+            class="border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-gray-100 transition transform hover:scale-105"
+          >
+            Bersihkan
+          </button>
+        </div>
+
+        <!-- Hasil perhitungan -->
+        <div
+          id="summary"
+          class="bg-white/70 border border-gray-200 rounded-xl p-5 hidden fade-up"
+        >
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2"
+          >
+            Hasil Perhitungan
+          </h2>
+          <div id="totals" class="text-sm text-gray-700 mb-3"></div>
+          <div
+            id="settle"
+            class="bg-white border border-gray-100 p-3 rounded-lg text-sm"
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 🌾 FOOTER -->
+    <footer
+      class="bg-white/60 backdrop-blur-md border-t border-white/30 text-center p-4 text-sm text-green-700 mt-10"
+    >
+      © 2025 SplitEase. Dibuat dengan 💚 oleh SMA 1 Durnenan.
+    </footer>
+
+    <script>
+      /* ==========================================================
+     🧩 DEKLARASI VARIABEL DOM DAN DATA
+     ========================================================== */
+      const people = []; // Array untuk menyimpan data peserta (nama & jumlah)
+      const nameInput = document.getElementById("name"); // Input nama peserta
+      const amountInput = document.getElementById("amount"); // Input jumlah uang
+      const addBtn = document.getElementById("add"); // Tombol tambah peserta
+      const listEl = document.getElementById("peopleList"); // Elemen daftar peserta
+      const peopleWrap = document.getElementById("peopleWrap"); // Container daftar peserta
+      const calculateBtn = document.getElementById("calculate"); // Tombol hitung patungan
+      const clearBtn = document.getElementById("clear"); // Tombol hapus semua data
+      const summaryEl = document.getElementById("summary"); // Elemen hasil perhitungan
+      const totalsEl = document.getElementById("totals"); // Elemen total & rata-rata
+      const settleEl = document.getElementById("settle"); // Elemen instruksi pembayaran
+      const menuBtn = document.getElementById("menu-btn"); // Tombol hamburger menu
+      const menu = document.getElementById("menu"); // Menu navigasi
+      const iconOpen = document.getElementById("icon-open"); // Ikon menu (buka)
+      const iconClose = document.getElementById("icon-close"); // Ikon menu (tutup)
+
+      /* ==========================================================
+     🍔 EVENT: TOGGLE MENU MOBILE
+     ========================================================== */
+      menuBtn.addEventListener("click", () => {
+        const isHidden = menu.classList.contains("hidden");
+        menu.classList.toggle("hidden", !isHidden);
+        iconOpen.classList.toggle("hidden");
+        iconClose.classList.toggle("hidden");
+
+        // Tambah atau hapus animasi dan styling menu dropdown
+        if (isHidden) {
+          menu.classList.add(
+            "flex",
+            "flex-col",
+            "absolute",
+            "top-full",
+            "right-4",
+            "bg-white",
+            "shadow-lg",
+            "rounded-xl",
+            "p-4",
+            "space-y-3",
+            "animate-fade-in"
+          );
+        } else {
+          menu.classList.remove(
+            "flex",
+            "flex-col",
+            "absolute",
+            "top-full",
+            "right-4",
+            "bg-white",
+            "shadow-lg",
+            "rounded-xl",
+            "p-4",
+            "space-y-3",
+            "animate-fade-in"
+          );
+        }
+      });
+
+      /* ==========================================================
+     📜 FUNGSI: RENDER LIST PESERTA
+     ========================================================== */
+      function renderList() {
+        listEl.innerHTML = ""; // Hapus isi daftar sebelumnya
+        const hint = peopleWrap.querySelector("p");
+        hint.style.display = people.length ? "none" : "block"; // Sembunyikan pesan kosong jika ada data
+
+        // Buat elemen <li> untuk setiap peserta
+        people.forEach((p, i) => {
+          const li = document.createElement("li");
+          li.className =
+            "flex justify-between items-center py-2 transition hover:bg-gray-50 rounded-lg px-2";
+          li.innerHTML = `
+        <div>
+          <strong class="text-gray-800">${escapeHtml(p.name)}</strong>
+          <span class="block text-sm text-gray-500">Rp ${formatMoney(
+            p.amount
+          )}</span>
+        </div>
+        <button data-i="${i}" class="text-red-500 hover:text-red-700 text-sm font-medium">Hapus</button>`;
+          listEl.appendChild(li);
+        });
+
+        // Tambahkan event listener untuk tombol "Hapus"
+        listEl.querySelectorAll("button[data-i]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idx = Number(btn.getAttribute("data-i"));
+            people.splice(idx, 1); // Hapus peserta dari array
+            renderList(); // Render ulang daftar
+          });
+        });
+      }
+
+      /* ==========================================================
+     ➕ EVENT: TAMBAH PESERTA KE DAFTAR
+     ========================================================== */
+      addBtn.addEventListener("click", () => {
+        const name = nameInput.value.trim();
+        const rawValue = amountInput.value.replace(/\./g, ""); // Hapus titik pemisah ribuan
+        const am = parseFloat(rawValue);
+
+        // Validasi input nama
+        if (!name) {
+          showToast("⚠️ Masukkan nama peserta!", "warning");
+          nameInput.classList.add("ring-2", "ring-red-400");
+          setTimeout(
+            () => nameInput.classList.remove("ring-2", "ring-red-400"),
+            800
+          );
+          return;
+        }
+
+        // Validasi jumlah uang
+        if (Number.isNaN(am) || am <= 0) {
+          showToast("⚠️ Masukkan jumlah yang valid!", "error");
+          amountInput.classList.add("ring-2", "ring-red-400");
+          setTimeout(
+            () => amountInput.classList.remove("ring-2", "ring-red-400"),
+            800
+          );
+          return;
+        }
+
+        // Tambahkan ke array peserta
+        people.push({ name, amount: Math.round(am * 100) / 100 });
+        nameInput.value = "";
+        amountInput.value = "";
+
+        renderList();
+        showToast("✅ Peserta berhasil ditambahkan!", "success");
+      });
+
+      /* ==========================================================
+     💰 EVENT: HITUNG PEMBAGIAN PATUNGAN
+     ========================================================== */
+      calculateBtn.addEventListener("click", () => {
+        if (people.length === 0)
+          return showToast("⚠️ Tambahkan peserta terlebih dahulu.", "warning");
+
+        // Hitung total & rata-rata per orang
+        const total = people.reduce((s, p) => s + p.amount, 0);
+        const perPerson = Math.round((total / people.length) * 100) / 100;
+
+        // Hitung saldo tiap orang (positif = kelebihan, negatif = kekurangan)
+        const balances = people.map((p) => ({
+          name: p.name,
+          balance: Math.round((p.amount - perPerson) * 100) / 100,
+        }));
+
+        // Tampilkan total dan rata-rata
+        totalsEl.innerHTML = `
+      <div class="p-4 bg-gradient-to-r from-green-500 via-emerald-500 to-lime-500 text-white rounded-xl shadow-lg animate-fade-in">
+        <span class="block text-lg font-semibold tracking-wide">
+          Total Pembayaran: <span class="text-yellow-200">Rp ${formatMoney(
+            total
+          )}</span>
+        </span>
+        <span class="block mt-1 text-sm opacity-90">
+          Rata-rata per orang: <span class="text-white font-medium">Rp ${formatMoney(
+            perPerson
+          )}</span>
+        </span>
+      </div>`;
+
+        // Pisahkan yang harus membayar dan menerima
+        const payers = balances
+          .filter((b) => b.balance < -0.004)
+          .map((b) => ({ name: b.name, amt: -b.balance }));
+        const receivers = balances
+          .filter((b) => b.balance > 0.004)
+          .map((b) => ({ name: b.name, amt: b.balance }));
+
+        // Buat daftar instruksi pembayaran
+        const instructions = [];
+        let i = 0,
+          j = 0;
+        while (i < payers.length && j < receivers.length) {
+          const pay = payers[i];
+          const rec = receivers[j];
+          const x = Math.min(pay.amt, rec.amt);
+
+          instructions.push(`
+        <div class="bg-white/80 rounded-xl p-3 my-2 shadow-md border-l-4 border-green-400 animate-slide-in">
+          <strong class="text-green-500">${escapeHtml(
+            pay.name
+          )}</strong> membayar
+          <span class="text-green-600 font-semibold">Rp ${formatMoney(
+            x
+          )}</span> ke <strong>${escapeHtml(rec.name)}</strong>
+        </div>`);
+
+          pay.amt -= x;
+          rec.amt -= x;
+          if (pay.amt <= 0.004) i++;
+          if (rec.amt <= 0.004) j++;
+        }
+
+        // Tampilkan hasil akhir
+        settleEl.innerHTML = instructions.length
+          ? instructions.join("")
+          : `<div class="text-center text-gray-600 italic animate-fade-in">🎉 Semua sudah seimbang — tidak ada pembayaran diperlukan.</div>`;
+
+        summaryEl.classList.remove("hidden");
+        showToast("✅ Perhitungan selesai!", "success");
+      });
+
+      /* ==========================================================
+     🧹 EVENT: HAPUS SEMUA DATA
+     ========================================================== */
+      clearBtn.addEventListener("click", () => {
+        showConfirmDialog(
+          "Bersihkan Semua Data?",
+          "Semua Peserta dari daftar akan terhapus.",
+          () => {
+            people.length = 0;
+            renderList();
+            summaryEl.classList.add("hidden");
+            showToast("✅ Semua data berhasil dibersihkan!", "success");
+          }
+        );
+      });
+
+      /* ==========================================================
+     🧮 UTILITAS FORMAT ANGKA & KEAMANAN TEKS
+     ========================================================== */
+      function formatMoney(n) {
+        return Number(n).toLocaleString("id-ID", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function escapeHtml(s) {
+        return s.replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[c])
+        );
+      }
+
+      function formatNumber(input) {
+        // Hapus semua karakter selain angka
+        let value = input.value.replace(/[^0-9]/g, "");
+        // Tambahkan titik setiap tiga angka
+        input.value = value ? value.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
+      }
+
+      /* ==========================================================
+     🔔 TOAST NOTIFIKASI SEMENTARA
+     ========================================================== */
+      function showToast(message, type = "info") {
+        const colors = {
+          success: "bg-green-500",
+          warning: "bg-yellow-500",
+          error: "bg-red-500",
+          info: "bg-blue-500",
+        };
+
+        const toast = document.createElement("div");
+        toast.className = `${
+          colors[type] || colors.info
+        } fixed top-5 right-5 text-white px-5 py-3 rounded-xl shadow-lg z-50 animate-fade-in`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add("animate-fade-out");
+          setTimeout(() => toast.remove(), 300);
+        }, 2500);
+      }
+
+      /* ==========================================================
+     ⚠️ KONFIRMASI SEBELUM MENGHAPUS
+     ========================================================== */
+      function showConfirmDialog(title, message, onConfirm) {
+        // Buat overlay transparan
+        const overlay = document.createElement("div");
+        overlay.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in";
+
+        // Buat kontainer dialog konfirmasi
+        const dialog = document.createElement("div");
+        dialog.className =
+          "bg-white rounded-2xl shadow-2xl p-6 w-80 text-center animate-scale-in";
+
+        dialog.innerHTML = `
+      <h2 class="text-lg font-semibold mb-2">${title}</h2>
+      <p class="text-sm text-gray-600 mb-4">${message}</p>
+      <div class="flex justify-center gap-3">
+        <button id="cancelBtn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg">Batal</button>
+        <button id="confirmBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg">Hapus</button>
+      </div>
+    `;
+
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        // Tombol batal → tutup dialog
+        dialog.querySelector("#cancelBtn").addEventListener("click", () => {
+          overlay.classList.add("animate-fade-out");
+          setTimeout(() => overlay.remove(), 300);
+        });
+
+        // Tombol konfirmasi → jalankan callback & tutup dialog
+        dialog.querySelector("#confirmBtn").addEventListener("click", () => {
+          onConfirm();
+          overlay.classList.add("animate-fade-out");
+          setTimeout(() => overlay.remove(), 300);
+        });
+      }
+
+      /* ==========================================================
+     🚀 INISIALISASI PERTAMA
+     ========================================================== */
+      renderList(); // Jalankan saat halaman pertama kali dimuat
+    </script>
+  </body>
+</html>
