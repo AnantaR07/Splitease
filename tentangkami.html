@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SplitEase – Tentang Kami</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assests/img/logo-splitease.png"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* ================================
+         🌿 STYLE DASAR HALAMAN
+         ================================ */
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(-45deg, #bbf7d0, #86efac, #4ade80, #22c55e);
+        background-size: 400% 400%;
+        animation: gradientMove 12s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ================================
+         💫 ANIMASI FADE-UP UNTUK KONTEN
+         ================================ */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 0.8s forwards;
+      }
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ================================
+   🧍‍♂️ Profil Card Hover Effect
+   ================================ */
+      .profile-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .profile-card:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav
+      class="w-full shadow-md py-3 px-4 sm:px-6 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-50"
+    >
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img
+          src="./assests/img/logo-splitease.png"
+          alt="SplitEase Logo"
+          class="w-8 h-8 rounded-md"
+        />
+        <span class="text-green-700 font-semibold text-lg">SplitEase</span>
+      </div>
+
+      <!-- Hamburger button -->
+      <button
+        id="menu-btn"
+        class="md:hidden flex items-center justify-center text-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-lg p-2"
+      >
+        <svg
+          id="icon-open"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+        <svg
+          id="icon-close"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <!-- Menu utama -->
+      <ul
+        id="menu"
+        class="hidden md:flex md:space-x-6 text-green-700 font-medium md:items-center"
+      >
+        <li>
+          <a
+            href="index.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+            >Beranda</a
+          >
+        </li>
+        <li>
+          <a
+            href="kontak.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+            >Kontak</a
+          >
+        </li>
+        <li>
+          <a
+            href="tentangkami.html"
+            class="block px-3 py-2 hover:text-green-900 transition transform hover:scale-105"
+            >Tentang Kami</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Konten utama -->
+    <main class="flex-1 flex flex-col items-center justify-start mt-20 px-4">
+      <!-- Bagian Tentang SplitEase -->
+      <section
+        class="bg-white/90 backdrop-blur-md shadow-xl rounded-3xl w-full max-w-4xl p-8 border border-white/30 fade-up mb-10 text-center"
+      >
+        <h1 class="text-3xl font-bold text-green-700 mb-4">
+          Tentang SplitEase
+        </h1>
+        <p class="text-gray-700 leading-relaxed">
+          <strong>SplitEase</strong> adalah aplikasi kalkulator patungan
+          otomatis yang dirancang untuk mempermudah pembagian biaya secara adil
+          dan cepat. Dengan tampilan yang sederhana, pengguna dapat menghitung
+          total pembayaran bersama hanya dalam hitungan detik — cocok untuk
+          teman, keluarga, atau rekan kerja yang sering berbagi pengeluaran.
+        </p>
+        <p class="text-gray-700 leading-relaxed mt-4">
+          Tujuan kami adalah menciptakan pengalaman yang
+          <span class="font-semibold text-green-700"
+            >mudah, transparan, dan menyenangkan</span
+          >
+          saat menghitung patungan. Tidak ada lagi perhitungan manual yang rumit
+          — cukup masukkan nominal, dan biarkan SplitEase yang menyelesaikannya
+          untukmu!
+        </p>
+      </section>
+
+      <!-- Bagian Tim Pengembang -->
+      <div
+        class="bg-white/90 backdrop-blur-md shadow-xl rounded-3xl w-full max-w-4xl p-8 border border-white/30 fade-up mx-auto flex flex-col items-center space-y-8"
+      >
+        <h1 class="text-3xl font-bold text-green-700 text-center">
+          Tim Pengembang SplitEase
+        </h1>
+        <p class="text-gray-700 text-center mb-6">
+          Berikut adalah profil pengembang yang membuat SplitEase.
+        </p>
+
+        <!-- Wrapper agar benar-benar di tengah -->
+        <div class="w-full flex justify-center">
+          <!-- Grid Profil -->
+          <div class="grid grid-cols-1 gap-8 justify-items-center">
+            <!-- Profil 1 -->
+            <div
+              class="bg-white/70 backdrop-blur-md rounded-2xl p-6 text-center shadow-md hover:shadow-xl transition transform hover:scale-105 w-full max-w-xs flex flex-col items-center"
+            >
+              <img
+                src="./assests/img/Developer1.jpg"
+                alt="Developer 1"
+                class="w-32 h-32 rounded-full mb-4 object-cover"
+              />
+
+              <h2 class="text-xl font-semibold text-green-700">
+                Ananta Romadhan
+              </h2>
+
+              <p class="text-gray-600 mb-2">Junior Full Stack Developer</p>
+
+              <div class="flex justify-center gap-4 mt-2">
+                <a
+                  href="https://wa.me/6287750704842"
+                  target="_blank"
+                  class="text-green-600 hover:text-green-900 transition"
+                >
+                  <img
+                    src="./assests/img/whatsapp-icon.png"
+                    alt="WA"
+                    class="w-6 h-6"
+                  />
+                </a>
+
+                <a
+                  href="mailto:ananta076238@gmail.com"
+                  class="text-green-600 hover:text-green-900 transition"
+                >
+                  <img
+                    src="./assests/img/email-icon.png"
+                    alt="Email"
+                    class="w-6 h-6"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-white/60 backdrop-blur-md border-t border-white/30 text-center p-4 text-sm text-green-700 mt-10"
+    >
+      © 2025 SplitEase. Dibuat dengan 💚 oleh SMA 1 Durnenan.
+    </footer>
+
+    <script>
+      const menuBtn = document.getElementById("menu-btn");
+      const menu = document.getElementById("menu");
+      const iconOpen = document.getElementById("icon-open");
+      const iconClose = document.getElementById("icon-close");
+
+      // 📱 Menu dropdown toggle
+      menuBtn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        iconOpen.classList.toggle("hidden");
+        iconClose.classList.toggle("hidden");
+      });
+
+      // 🌿 Animasi saat scroll (fade-up)
+      const fadeElements = document.querySelectorAll(".fade-up");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.animationDelay = "0.1s";
+              entry.target.classList.add("animate-fade-in");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      fadeElements.forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>
